@@ -1,5 +1,23 @@
 <script setup>
+import { computed } from 'vue';
+import { getPressureMm, getTime } from '@/utils';
 
+const props = defineProps({
+  weatherInfo: {
+    type: [Object, null],
+    required: true,
+  }
+});
+
+const timeZone = computed(() => props.weatherInfo?.timezone);
+
+const sunriseTime = computed(() => {
+  return getTime(props.weatherInfo?.sys?.sunrise + timeZone.value);
+});
+
+const sunsetTime = computed(() => {
+  return getTime(props.weatherInfo?.sys?.sunset + timeZone.value);
+});
 </script>
 
 <template>
@@ -18,7 +36,7 @@
             <div class="card-justify">
               <div class="info-main">
                 <div class="info-main-num">
-                  3.6
+                  {{ weatherInfo?.wind?.speed }}
                 </div>
                 <div class="info-main-text">
                   m/s
@@ -26,7 +44,7 @@
               </div>
               <div class="info-main">
                 <div class="info-main-num">
-                  350
+                  {{ weatherInfo?.wind?.deg }}
                 </div>
                 <div class="info-main-text">
                   deg
@@ -40,9 +58,9 @@
             Wind gusts
           </div>
           <div class="card-small-info">
-            <div class="card-small-data">
+            <div v-if="weatherInfo?.wind?.gust" class="card-small-data">
               <div class="info-main-num">
-                8.4
+                {{ Math.round(weatherInfo?.wind?.gust) }}
               </div>
               <div class="info-main-text">
                 m/s
@@ -52,7 +70,8 @@
               <div class="card-small-pic card-small-pic--wind"></div>
               <div class="card-small-text text-egorova">
                 Learn
-                <a href="https://www.windy.com/articles/weather-phenomena-what-s-the-difference-between-sustained-winds-and-wind-gusts-10390?satellite,7.787,115.115,5" target="_blank">more</a>
+                <a href="https://www.windy.com/articles/weather-phenomena-what-s-the-difference-between-sustained-winds-and-wind-gusts-10390?satellite,7.787,115.115,5"
+                   target="_blank">more</a>
                 about gusts
               </div>
             </div>
@@ -69,7 +88,7 @@
             <div class="card-centered">
               <div class="info-main">
                 <div class="info-main-num">
-                  765
+                  {{ getPressureMm(weatherInfo?.main?.pressure) }}
                 </div>
                 <div class="info-main-text">
                   mm
@@ -85,7 +104,7 @@
           <div class="card-small-info">
             <div class="card-small-data">
               <div class="info-main-num">
-                21
+                {{ Math.round(weatherInfo?.main?.feels_like) }}
               </div>
               <div class="info-main-text">
                 °C
@@ -114,7 +133,7 @@
                   Sunrise
                 </div>
                 <div class="state-time">
-                  07:31:42
+                  {{ sunriseTime }}
                 </div>
               </div>
               <div class="state">
@@ -123,7 +142,7 @@
                   Sunset
                 </div>
                 <div class="state-time">
-                  18:34:19
+                  {{ sunsetTime }}
                 </div>
               </div>
             </div>
@@ -136,7 +155,7 @@
           <div class="card-small-info">
             <div class="card-small-data">
               <div class="info-main-num">
-                80
+                {{ weatherInfo?.clouds?.all }}
               </div>
               <div class="info-main-text">
                 %
@@ -351,8 +370,8 @@
 
     &--margin {
       width: 16px;
-    height: 16px;
-    margin-bottom: 3px;
+      height: 16px;
+      margin-bottom: 3px;
     }
 
     &--wind {
@@ -364,7 +383,7 @@
     }
 
     &--sun {
-     background-image: url('@/assets/img/cloud.svg');
+      background-image: url('@/assets/img/cloud.svg');
     }
   }
 
