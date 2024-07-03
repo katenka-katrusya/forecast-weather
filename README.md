@@ -1,7 +1,8 @@
 # Суть приложения:
 
-Приложение для прогноза погоды. Вводить город нужно на английском. [Forecast](https://forecast-weather-ruby.vercel.app/)
-API, которое использовалось - [OpenWeatherMap](https://openweathermap.org/)
+Приложение для прогноза погоды. Вводить город нужно на английском [Forecast](https://forecast-weather-ruby.vercel.app/).
+
+API, которое использовалось - [OpenWeatherMap](https://openweathermap.org/).
 
 Почему на английском? Потому что подгрузка картинок происходит по description с API.
 
